@@ -22,13 +22,13 @@ double getB(const double x, const double y, const double z, double a);
  * @brief Точка входа в программу
  * @return Возвращает 0, если программа выполнена корректно
  */
-int main()
+int main(void)
 {
 	const double x = -0.5;
 	const double y = 1.7;
 	const double z = 0.44;
-	double a = getA(x, y, z);
-	double b = getB(x, y, z, a);
+	const double a = getA(x, y, z);
+	const double b = getB(x, y, z, a);
 	printf("x = %lf\n", x);
 	printf("y = %lf\n", y);
 	printf("z = %lf\n", z);
@@ -40,12 +40,10 @@ int main()
 
 double getA(const double x, const double y, const double z)
 {
-	double a = pow(exp(1.0), y * z) * sin(x * z - y) - pow(fabs(y * z + x), 0.5);
-	return a;
+	return pow(exp(1.0), y * z) * sin(x * z - y) - pow(fabs(y * z + x), 0.5);
 }
 
 double getB(const double x, const double y, const double z, double a)
 {
-	double b = y * sin(a * pow(z, 2) * cos(2 * z)) - 1;
-	return b;
+	return y * sin(a * pow(z, 2) * cos(2 * z)) - 1;
 }
