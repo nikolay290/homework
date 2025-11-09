@@ -1,9 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <float.h>
+#include <math.h>
+#include <locale.h>
 /*
 * @brief Функция проверяет, что число отлично от нуля
+* @param num - проверяемое значение
 */
 void checkvalue(const double num);
 
@@ -13,7 +16,7 @@ void checkvalue(const double num);
 * @param num2 - второе число
 * @return сумму двух чисел
 */
-double sumvalue(double num1, double num2);
+double sumvalue(const double num1, const double num2);
 
 /*
 * @brief Функция для вычисления разности 2 чисел
@@ -21,7 +24,7 @@ double sumvalue(double num1, double num2);
 * @param num2 - второе число
 * @return разность двух чисел
 */
-double diffvalue(double num1, double num2);
+double diffvalue(const double num1, const double num2);
 
 /*
 * @brief Функция для вычисления произведения 2 чисел
@@ -29,7 +32,7 @@ double diffvalue(double num1, double num2);
 * @param num2 - второе число
 * @return произведение двух чисел
 */
-double prodvalue(double num1, double num2);
+double prodvalue(const double num1, const double num2);
 
 /*
 * @brief Функция для вычисления частного 2 чисел
@@ -37,7 +40,7 @@ double prodvalue(double num1, double num2);
 * @param num2 - второе число
 * @return частное двух чисел
 */
-double quovalue(double num1, double num2);
+double quovalue(const double num1, const double num2);
 
 /*
 * @brief Функция для ввода 2 чисел и вычисления их суммы, разности, произведения, частного.
@@ -49,7 +52,7 @@ int main(void)
 {
 	double num1 = 0;
 	double num2 = 0;
-
+	char* locale = setlocale(LC_ALL, "");
 	printf("Введите первое число: ");
 	scanf("%lf", &num1);
 	printf("Введите второе число: ");
@@ -67,37 +70,29 @@ int main(void)
 
 void checkvalue(const double num)
 {
-	if (num == 0)
+	if (fabs(num) < DBL_EPSILON)
 	{
-		printf("Второе число должно быть отлично от нуля");
+		fprintf(stderr, "Ошибка: второе число должно быть отлично от нуля\n");
 		exit(1);
 	}
 }
 
-double sumvalue(double num1, double num2)
+double sumvalue(const double num1, const double num2)
 {
-	double sum;
-	sum = num1 + num2;
-	return sum;
+	return num1 + num2;
 }
 
-double diffvalue(double num1, double num2)
+double diffvalue(const double num1, const double num2)
 {
-	double diff;
-	diff = num1 - num2;
-	return diff;
+	return num1 - num2;
 }
 
-double prodvalue(double num1, double num2)
+double prodvalue(const double num1, const double num2)
 {
-	double prod;
-	prod = num1 * num2;
-	return prod;
+	return num1 * num2;
 }
 
-double quovalue(double num1, double num2)
+double quovalue(const double num1, const double num2)
 {
-	double quo;
-	quo = num1 / num2;
-	return quo;
+	return num1 / num2;
 }
