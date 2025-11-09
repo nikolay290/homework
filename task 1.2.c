@@ -1,84 +1,100 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
+
 /*
-* @brief Уункциџ проверџет, что второе число отлично от нулџ
+* @brief Функция проверяет, что число отлично от нуля
 */
 void checkvalue(const double num);
+
 /*
-* @brief Уункциџ длџ вычислениџ суммы 2 чисел
+* @brief Функция для вычисления суммы 2 чисел
 * @param num1 - первое число
 * @param num2 - второе число
 * @return сумму двух чисел
 */
 double sumvalue(double num1, double num2);
+
 /*
-* @brief Уункциџ длџ вычислениџ разности 2 чисел
+* @brief Функция для вычисления разности 2 чисел
 * @param num1 - первое число
 * @param num2 - второе число
 * @return разность двух чисел
 */
 double diffvalue(double num1, double num2);
+
 /*
-* @brief Уункциџ длџ вычислениџ произведениџ 2 чисел
+* @brief Функция для вычисления произведения 2 чисел
 * @param num1 - первое число
 * @param num2 - второе число
 * @return произведение двух чисел
 */
 double prodvalue(double num1, double num2);
+
 /*
-* @brief Уункциџ длџ вычислениџ частного 2 чисел
+* @brief Функция для вычисления частного 2 чисел
 * @param num1 - первое число
 * @param num2 - второе число
 * @return частное двух чисел
 */
 double quovalue(double num1, double num2);
+
 /*
-* @brief Уункциџ длџ ввода 2 чисел и вычислениџ их суммы, разности, произведениџ, частного.
+* @brief Функция для ввода 2 чисел и вычисления их суммы, разности, произведения, частного.
 * @param num1 - первое число
 * @param num2 - второе число число
-* @return рассчитанное значениџ
+* @return рассчитанное значение
 */
 int main(void)
 {
 	double num1 = 0;
 	double num2 = 0;
-	printf("?ведите первое число ");
-	scanf_s("%lf", &num1);
-	printf("?ведите второе число ");
-	scanf_s("%lf", &num2);
+
+	printf("Введите первое число: ");
+	scanf("%lf", &num1);
+	printf("Введите второе число: ");
+	scanf("%lf", &num2);
+
 	checkvalue(num2);
-	printf("Фумма: %lf\n", sumvalue(num1,num2));
-	printf("¬азность %lf\n", diffvalue(num1, num2));
-	printf("Ъроизведение %lf\n", prodvalue(num1, num2));
-	printf("Састное %lf\n", quovalue(num1, num2));
+
+	printf("Сумма: %lf\n", sumvalue(num1, num2));
+	printf("Разность: %lf\n", diffvalue(num1, num2));
+	printf("Произведение: %lf\n", prodvalue(num1, num2));
+	printf("Частное: %lf\n", quovalue(num1, num2));
+
 	return 0;
 }
+
 void checkvalue(const double num)
 {
-	if (num == 0)	
+	if (num == 0)
 	{
-		printf("?торое число должно быть отлично от нулџ");
+		printf("Второе число должно быть отлично от нуля");
 		exit(1);
 	}
 }
+
 double sumvalue(double num1, double num2)
 {
 	double sum;
 	sum = num1 + num2;
 	return sum;
 }
+
 double diffvalue(double num1, double num2)
 {
 	double diff;
 	diff = num1 - num2;
 	return diff;
 }
+
 double prodvalue(double num1, double num2)
 {
 	double prod;
 	prod = num1 * num2;
 	return prod;
 }
+
 double quovalue(double num1, double num2)
 {
 	double quo;
