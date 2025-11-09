@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
-
+#include <math.h>
+#define EPSILON 1e-9
 
 /*
 * @brief Функция ввода значений пользователем
@@ -10,6 +11,10 @@
 * @return введённое пользователем значение
 */
 double getValue(void);
+/*
+* @brief Функция для выбора операции пользователем
+* @return Результат выбранной оперции
+*/
 int vibor(const double num1, const double num2);
 /*
 * @brief Функция для вычисления суммы 2 чисел
@@ -75,26 +80,22 @@ double getValue()
 
 double sumvalue(const double num1, const double num2)
 {
-    double sum = 0;
-    sum = num1 + num2;
+    double sum = num1 + num2;
     return sum;
 }
 double diffvalue(const double num1, const double num2)
 {
-    double diff = 0;
-    diff = num1 - num2;
+    double diff = num1 - num2;
     return diff;
 }
 double prodvalue(const double num1, const double num2)
 {
-    double prod = 0;
-    prod = num1 * num2;
+    double prod = num1 * num2;
     return prod;
 }
 double quovalue(const double num1, const double num2)
 {
-    double quo = 0;
-    quo = num1 / num2;
+    double quo = num1 / num2;
     return quo;
 }
 
@@ -113,7 +114,8 @@ int vibor(const double num1, const double num2)
         printf("Произведение равно %.2lf", prodvalue(num1, num2));
         break;
     case DELENIE:
-        if (num2 == 0) {
+        if (num2 == 0 + EPSILON)
+        {
             printf("error\n");
             exit(1);
         };
