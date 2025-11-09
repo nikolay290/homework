@@ -4,11 +4,11 @@
 #include <stdlib.h>
 
 /*
-* @brief Функция для ввода значений
-* @param m - указатель на массу ложки
-* @param Q - указатель на энергию
+* @brief Функция для ввода значения с проверкой
+* @param prompt - сообщение для пользователя
+* @return - введенное значение
 */
-void getvalue(double* m, double* Q);
+double getvalue(const char* prompt);
 
 /*
 * @brief Функция для вычисления изменения температуры ложки
@@ -17,37 +17,35 @@ void getvalue(double* m, double* Q);
 * @param Q - энергия, которую отдала ложка
 * @return - изменение температуры ложки
 */
-double gettemp(const int c, double m, double Q);
+double gettemp(const int c, const double m, const double Q);
 
-int main()
+int main(void)
 {
-    const int c = 460;
-    double m = 0;  
-    double Q = 0;  
+    double c = 0;
+    double m = 0;
+    double Q = 0;
 
     char* locale = setlocale(LC_ALL, "");
-    getvalue(&m, &Q);  
+    c = getvalue("Введите удельную теплоёмкость ложки: ");
+    m = getvalue("Введите массу ложки: ");
+    Q = getvalue("Введите количество энергии, которую отдала ложка: ");
+
     printf("Температура изменилась на: %lf", gettemp(c, m, Q));
     return 0;
 }
 
-double gettemp(const int c, double m, double Q)
+double getvalue(const char* prompt)
 {
-    double temp = Q / (c * (m / 1000));
-    return temp;
+    double value;
+    printf("%s", prompt);
+    if (scanf("%lf", &value) != 1) {
+        fprintf(stderr, "Ошибка ввода значения\n");
+        exit(1);
+    }
+    return value;
 }
 
-void getvalue(double* m, double* Q)
+double gettemp(const int c, const double m, const double Q)
 {
-    printf("Введите массу ложки: ");
-    if (scanf("%lf", m) != 1) {
-        printf("Ошибка ввода массы\n");
-        exit(1);
-    }
-
-    printf("Введите количество энергии, которую отдала ложка: ");
-    if (scanf("%lf", Q) != 1) {
-        printf("Ошибка ввода энергии\n");
-        exit(1);
-    }
+    return Q / (c * (m / 1000));
 }
