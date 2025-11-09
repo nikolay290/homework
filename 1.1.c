@@ -5,6 +5,7 @@
  * @param x - значение параметра x
  * @param y - значение параметра y
  * @param z - значение параметра z
+ * @param a - значение параметра a
  * @return рассчитанное значение
  */
 double getA(const double x, const double y, const double z);
@@ -15,7 +16,7 @@ double getA(const double x, const double y, const double z);
  * @param z - значение параметра z
  * @return рассчитанное значение
  */
-double getB(const double x, const double y, const double z, const double a);
+double getB(const double x, const double y, const double z,const double a);
 
 
 /**
@@ -47,4 +48,3 @@ double getB(const double x, const double y, const double z, const double a)
 {
 	return y * sin(a * pow(z, 2) * cos(2 * z)) - 1;
 }
-
