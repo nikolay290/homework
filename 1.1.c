@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 /**
- * @brief Рассчитывает функцию A по заданной формуле
+ * @brief рассчитывает функцию A по заданной формуле
  * @param x - значение параметра x
  * @param y - значение параметра y
  * @param z - значение параметра z
@@ -9,7 +9,7 @@
  */
 double getA(const double x, const double y, const double z);
 /**
- * @brief Рассчитывает функцию В по заданной формуле
+ * @brief рассчитывает функцию B по заданной формуле
  * @param x - значение параметра x
  * @param y - значение параметра y
  * @param z - значение параметра z
@@ -17,17 +17,16 @@ double getA(const double x, const double y, const double z);
  */
 double getB(const double x, const double y, const double z, double a);
 
-const double x = -0.5;
-const double y = 1.7;
-const double z = 0.44;
-double a;
-double b;
+
 /**
  * @brief Точка входа в программу
  * @return Возвращает 0, если программа выполнена корректно
  */
 int main()
 {
+	const double x = -0.5;
+	const double y = 1.7;
+	const double z = 0.44;
 	double a = getA(x, y, z);
 	double b = getB(x, y, z, a);
 	printf("x = %lf\n", x);
