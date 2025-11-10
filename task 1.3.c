@@ -36,7 +36,7 @@ int main(void)
 
 double getvalue(const char* prompt)
 {
-    double value;
+    double value = 0;
     printf("%s", prompt);
     if (scanf("%lf", &value) != 1) {
         fprintf(stderr, "Ошибка ввода значения\n");
