@@ -53,7 +53,7 @@ void checkvalue(const double chislo)
 {
     if (chislo < DBL_EPSILON)
     {
-        printf("Error\n");
+        fprintf(stderr, "Error\n");
         exit(1);
     }
 }
@@ -67,7 +67,7 @@ double getValue(void)
     double value = 0;
     if (!scanf("%lf", &value))
     {
-        printf("Error\n");
+        fprintf(stderr,"Error\n");
         exit(1);
     };
     return value;
