@@ -3,16 +3,17 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <math.h>
-#define EPSILON 1e-9
+#include <float.h>
 
 /*
 * @brief Функция ввода значений пользователем
-* @param value - Вводимое пользователем значение
 * @return введённое пользователем значение
 */
 double getValue(void);
 /*
 * @brief Функция для выбора операции пользователем
+* @param num1 - первое число
+* @param num2 - второе число
 * @return Результат выбранной оперции
 */
 int vibor(const double num1, const double num2);
@@ -22,36 +23,38 @@ int vibor(const double num1, const double num2);
 * @param num2 - второе число
 * @return сумму двух чисел
 */
-double sumvalue(double num1, double num2);
+double sumvalue(const double num1, const double num2);
 /*
 * @brief Функция для вычисления разности 2 чисел
 * @param num1 - первое число
 * @param num2 - второе число
 * @return разность двух чисел
 */
-double diffvalue(double num1, double num2);
+double diffvalue(const double num1, const double num2);
 /*
 * @brief Функция для вычисления произведения 2 чисел
 * @param num1 - первое число
 * @param num2 - второе число
 * @return произведение двух чисел
 */
-double prodvalue(double num1, double num2);
+double prodvalue(const double num1, const double num2);
 /*
 * @brief Функция для вычисления частного 2 чисел
 * @param num1 - первое число
 * @param num2 - второе число
 * @return частное двух чисел
 */
-double quovalue(double num1, double num2);
+double quovalue(const double num1, const double num2);
 /**
-@brief PERIMETR - периметр прямоугольника
-@brief SQUARE - площадь прямоугольника
+@brief SUMMA - сумма двух чисел
+@brief RAZNOST - разность двух чисел
+@brief YMNOJENIE - умножение двух чисел
+@brief DELENIE - деление двух чисел
 */
 enum { SUMMA = 1, RAZNOST, YMNOJENIE, DELENIE };
 
 /**
- * @brief Точка входа в программу
+ * @brief Точка входа в программу   
  * @return возвращает 0, если программма выполнена корректно
  */
 int main(void)
@@ -72,7 +75,7 @@ double getValue()
     double value = 0;
     if (!scanf("%lf", &value))
     {
-        printf("Error\n");
+        fprintf(stderr, "Ошибка\n");
         exit(1);
     };
     return value;
@@ -80,23 +83,24 @@ double getValue()
 
 double sumvalue(const double num1, const double num2)
 {
-    double sum = num1 + num2;
-    return sum;
+    return num1 + num2;
 }
 double diffvalue(const double num1, const double num2)
 {
-    double diff = num1 - num2;
-    return diff;
+    return num1 - num2;
 }
 double prodvalue(const double num1, const double num2)
 {
-    double prod = num1 * num2;
-    return prod;
+    return num1 * num2;
 }
 double quovalue(const double num1, const double num2)
 {
-    double quo = num1 / num2;
-    return quo;
+    if (fabs(num2) < DBL_EPSILON)
+    {
+        fprintf(stderr, "Ошибка: второе число должно быть отлично от нуля\n");
+        exit(1);
+    };
+    return num1 / num2;
 }
 
 int vibor(const double num1, const double num2)
@@ -113,16 +117,11 @@ int vibor(const double num1, const double num2)
     case YMNOJENIE:
         printf("Произведение равно %.2lf", prodvalue(num1, num2));
         break;
-    case DELENIE:
-        if (num2 == 0 + EPSILON)
-        {
-            printf("error\n");
-            exit(1);
-        };
+    case DELENIE:      
         printf("Частное равно %.2lf", quovalue(num1, num2));
         break;
     default:
-        printf("Неправильный выбор");
+        fprintf(stderr, "Неправильный выбор\n");
         exit(1);
     }
 }
