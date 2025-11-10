@@ -1,92 +1,74 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <locale.h>
-#include <math.h>
 #include <stdlib.h>
-
-/**
-* @brief Функция ввода числа с проверкой.
-* @param message - Сообщение для пользователя.
-* @param chislo - Введенное пользователем число
-* @return chislo - Введенное пользователем число.
+#include <math.h>
+#include <locale.h>
+#include <float.h>
+/*
+* @brief Фунеция для проверки значения
+* @param chislo - Число для проверки
+*/
+void checkvalue(const double chislo);
+/*
+* @brief Функция ввода значений пользователем
+* @return Введённое пользователем значение
 */
 double getValue(void);
-
-/**
-* @brief Функция вычисления значения y = sin(ln(x)) - cos(ln(x)) + 2*ln(x).
-* @param x - Аргумент x, для которого вычисляется функция.
-* @param ln_x - Значение натурального логарифма от x.
-* @return y - Вычисленное значение функции.
-* @return NAN - Если x <= 0 и ln(x) не существует.
+/*
+* @brief Функция для вычисления Y
+* @param x - аргумент Y
+* @return Возвращает значение y(x) 
 */
-double get_y(const double x);
+double getY(const double x);
 
-/**
-* @brief Точка входа в программу.
-* @return start - Начало интервала табулирования.
-* @return end - Конец интервала табулирования.
-* @return delta_x - Шаг табулирования.
-* @param x - Аргумент x, для которого вычисляется функция.
-* @return y - Вычисленное значение функции.
-* @return 0 - Программа выполнена корректно.
+/*
+* @brief Точка входа в программу
+* @return 0 если программа выполнена корректно
 */
 int main(void)
 {
     char* locale = setlocale(LC_ALL, "");
 
-
-    printf("Введите начало интервала (x начальное): ");
-    double start = getValue();
-    printf("Введите конец интервала (x конечное): ");
-    double end = getValue();
-    printf("Введите шаг табулирования: ");
+    printf("Введите начало интервал\n");
+    double start_x = getValue();
+    printf("Введите конец интервала\n");
+    double end_x = getValue();
+    printf("Введите шаг табулирования\n");
     double delta_x = getValue();
-
-    printf("\nРезультаты табулирования:\n");
-    printf("==========================\n");
-    printf("%-10s %-15s\n", "x", "y");
-    printf("-------------------------\n");
-
-    double x = start;
-    double y = 0;
-
-    for (x = start; x <= end + 1e-9; x += delta_x)
+    checkvalue(delta_x);
+    double x = 0;
+    double num = 0;
+    for (x = start_x; x <= end_x + 1e-9; x += delta_x)
     {
-        y = get_y(x);
-
-        if (!isnan(y))
-        {
-            printf("%-10.4f %-15.4f\n", x, y);
-        }
-        else
-        {
-            printf("%-10.4f %-15s %-15s\n", x, "N/A", "Ошибка: ln(x) не существует");
-        }
+        num = getY(x);
+        printf("%lf\n", x);
+        printf("%lf\n", num);
+        printf("-------------------------\n");
     }
-
     return 0;
 }
 
-double getValue(void)
+
+void checkvalue(const double chislo)
 {
-    double chislo = 0;
-    if (scanf("%lf", &chislo) != 1)
+    if (chislo < DBL_EPSILON)
     {
-        printf("Ошибка ввода! Требуется вещественное число.\n");
+        printf("Error\n");
         exit(1);
     }
-
-    return chislo;
 }
-
-double get_y(const double x)
+double getY(const double x)
 {
-    if (x <= 0)
+    checkvalue(x);
+    return sin(log(x)) - cos(log(x)) + 2 * log(x);
+}
+double getValue(void)
+{
+    double value = 0;
+    if (!scanf("%lf", &value))
     {
-        return NAN;
-    }
-
-    double ln_x = log(x);
-    double y = sin(ln_x) - cos(ln_x) + 2 * ln_x;
-    return y;
+        printf("Error\n");
+        exit(1);
+    };
+    return value;
 }
