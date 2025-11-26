@@ -106,7 +106,7 @@ int main(void)
     printf("Original array:\n");
     printArray(arr, size);
 
-    // Создаем копию для работы
+
     int* copyArr = copyArray(arr, size);
     if (copyArr == NULL)
     {
@@ -115,14 +115,14 @@ int main(void)
         exit(1);
     }
 
-    // Задание 1: Замена первого отрицательного на первый положительный
+
     printf("\n1. Replace first negative with first positive:\n");
     if (replaceFirstNegativeFirstPositive(copyArr, size))
     {
         printArray(copyArr, size);
     }
 
-    // Задание 2: Удаление элементов, кратных 7 в диапазоне
+
     printf("\n2. Delete multiples of 7 in range:\n");
     size_t newSize = size;
     if (deleteMultiplesOf7InRange(copyArr, size, &newSize))
@@ -131,7 +131,7 @@ int main(void)
         printArray(copyArr, newSize);
     }
 
-    // Задание 3: Преобразование массива
+
     printf("\n3. Transform array:\n");
     if (transformArray(copyArr, newSize))
     {
