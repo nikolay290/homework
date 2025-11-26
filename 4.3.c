@@ -69,9 +69,9 @@ void replaceMinOpposite(int** copyArr, const size_t rows, const size_t columns);
  * @param copyArr массив
  * @param rows количество строк массива
  * @param columns количество столбцов массива
- * @return 0, если были удалены все строки, иначе 1.
+ * @return новый массив после удаления строк
  */
-int delRowsWithMax(int** copyArr, const size_t rows, const size_t columns);
+int** delRowsWithMax(int** copyArr, size_t* rows, const size_t columns);
 
 /**
  * @brief Проверяет, что минимальное значенье меньше максимального
@@ -99,49 +99,60 @@ enum {RANDOM = 1, MANUAL};
  * @brief Точка входа в программу
  * @return 0, если программа выполнена корректно, иначе 1
  */
-int main()
+int main(void)
 {
-
     size_t rows = getSize("Input quantity of rows of an array:\n");
     size_t columns = getSize("Input quantity of columns of an array:\n");
-    int** arr = getArray(rows,columns);
+    int** arr = getArray(rows, columns);
     printf("Chose the method of filling the array:\n%d - by random\n%d - manually\n", RANDOM, MANUAL);
     int choice = Value();
     switch(choice)
-        {
-            case RANDOM:
-                fillRandom(arr, rows, columns);
-                break;
-            case MANUAL:
-                fillArray(arr, rows, columns);
-                break;
-            default:
-                printf("error");
-                freeArray(arr, rows);
-                return 1;
-        }
+    {
+        case RANDOM:
+            fillRandom(arr, rows, columns);
+            break;
+        case MANUAL:
+            fillArray(arr, rows, columns);
+            break;
+        default:
+            printf("error");
+            freeArray(arr, rows);
+            return 1;
+    }
     printArray(arr, rows, columns);
+    
     int** copyArr = copyArray(arr, rows, columns);
     printf("Replacing min absolute element in every column:\n");
     replaceMinOpposite(copyArr, rows, columns);
     printArray(copyArr, rows, columns);
+    
     printf("Deleting rows with max elements:\n");
-    delRowsWithMax(copyArr, rows, columns);
+    size_t newRows = rows;
+    int** newArr = delRowsWithMax(copyArr, &newRows, columns);
+    if (newRows == 0) {
+        printf("All rows were deleted.\n");
+    } else {
+        printArray(newArr, newRows, columns);
+    }
+    
     freeArray(arr, rows);
     freeArray(copyArr, rows);
+    if (newArr != NULL && newArr != copyArr) {
+        freeArray(newArr, newRows);
+    }
     return 0;
 }
 
 int Value(void)
-    {
-        int value = 0;
-        int result = scanf("%d", &value);
-        if (result != 1){
-            fprintf(stderr, "Input error");
-            exit(1);
-        }
-        return value;
+{
+    int value = 0;
+    int result = scanf("%d", &value);
+    if (result != 1){
+        fprintf(stderr, "Input error");
+        exit(1);
     }
+    return value;
+}
 
 size_t getSize(char* message)
 {
@@ -181,7 +192,7 @@ void printArray(int** arr, const size_t rows, const size_t columns)
     printf("\n");
 }
 
-void fillRandom(int** arr, const size_t rows,const size_t columns)
+void fillRandom(int** arr, const size_t rows, const size_t columns)
 {
     printf("Input min:\n");
     int min = Value();
@@ -201,12 +212,18 @@ void fillRandom(int** arr, const size_t rows,const size_t columns)
 int** getArray(const size_t rows, const size_t columns)
 {
     int** arr = malloc(rows * sizeof(int*));
+    if (arr == NULL)
+    {
+        fprintf(stderr,"error");
+        exit(1);
+    }
+    
     for (size_t i = 0; i<rows; i++ ) {
         arr[i] = malloc(columns * sizeof(int));
-        if (arr == NULL)
+        if (arr[i] == NULL)
         {
             fprintf(stderr,"error");
-            freeArray(arr, rows);
+            freeArray(arr, i);
             exit(1);
         }
     }
@@ -221,7 +238,6 @@ void freeArray(int** arr, const size_t rows)
     }
     free(arr);
 }
-
 
 void checkRange(const int min, const int max)
 {
@@ -248,17 +264,25 @@ void replaceMinOpposite(int** copyArr, const size_t rows, const size_t columns) 
 
 int** copyArray(int** arr, const size_t rows, const size_t columns) {
     int** copyArr = malloc(rows * sizeof(int*));
-    for (size_t i = 0; i<rows; i++ )
-    {
-        copyArr[i] = malloc(columns * sizeof(int));
-    }
     if (copyArr == NULL)
     {
-        printf("error");
-        freeArray(copyArr, rows);
+        printf("Memory allocation error");
         exit(1);
     }
-    for (size_t i = 0; i < rows; i++) {
+    
+    for (size_t i = 0; i < rows; i++)
+    {
+        copyArr[i] = malloc(columns * sizeof(int));
+        if (copyArr[i] == NULL)
+        {
+            printf("Memory allocation error");
+            for (size_t j = 0; j < i; j++) {
+                free(copyArr[j]);
+            }
+            free(copyArr);
+            exit(1);
+        }
+        
         for (size_t j = 0; j < columns; j++) {
             copyArr[i][j] = arr[i][j];
         }
@@ -266,16 +290,20 @@ int** copyArray(int** arr, const size_t rows, const size_t columns) {
     return copyArr;
 }
 
-int delRowsWithMax(int** copyArr, const size_t rows, const size_t columns) {
+int** delRowsWithMax(int** copyArr, size_t* rows, const size_t columns) {
     int max = copyArr[0][0];
-    for (size_t i = 0; i < rows; i++) {
+    for (size_t i = 0; i < *rows; i++) {
         for (size_t j = 0; j < columns; j++) {
             if (copyArr[i][j] > max) {
                 max = copyArr[i][j];
             }
         }
     }
-    for (size_t i = 0; i < rows; i++) {
+    
+    bool* rowsToDelete = malloc(*rows * sizeof(bool));
+    int countToKeep = 0;
+    
+    for (size_t i = 0; i < *rows; i++) {
         bool containsMax = false;
         for (size_t j = 0; j < columns; j++) {
             if (copyArr[i][j] == max) {
@@ -283,33 +311,34 @@ int delRowsWithMax(int** copyArr, const size_t rows, const size_t columns) {
                 break;
             }
         }
-        if (containsMax == true) {
+        rowsToDelete[i] = containsMax;
+        if (!containsMax) {
+            countToKeep++;
+        }
+    }
+    
+    if (countToKeep == 0) {
+        *rows = 0;
+        free(rowsToDelete);
+        return NULL;
+    }
+    
+    int** newArr = malloc(countToKeep * sizeof(int*));
+    for (size_t i = 0; i < countToKeep; i++) {
+        newArr[i] = malloc(columns * sizeof(int));
+    }
+    
+    size_t newIndex = 0;
+    for (size_t i = 0; i < *rows; i++) {
+        if (!rowsToDelete[i]) {
             for (size_t j = 0; j < columns; j++) {
-                copyArr[i][j] = 0;
+                newArr[newIndex][j] = copyArr[i][j];
             }
+            newIndex++;
         }
     }
-    bool noChoicedRows = true;
-    for (size_t i = 0; i < rows; i++) {
-        bool noZeroRow = false;
-        for (size_t j = 0; j < columns; j++) {
-            if (copyArr[i][j] != 0) {
-                noZeroRow = true;
-                break;
-            }
-        }
-        if (noZeroRow == true) {
-            noChoicedRows = false;
-            for (size_t j=0; j<columns; j++)
-            {
-                printf("%5d", copyArr[i][j]);
-            }
-            printf("\n");
-        }
-    }
-    if (noChoicedRows == true) {
-        printf("All rows were deleted.");
-        return 0;
-    }
-    return 1;
+    
+    *rows = countToKeep;
+    free(rowsToDelete);
+    return newArr;
 }
