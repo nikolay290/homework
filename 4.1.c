@@ -40,8 +40,10 @@ void sumEven(int* arr, const size_t size);
  * @brief Заполняет массив случайными числами в пределах введённого пользователем диапазона
  * @param arr массив
  * @param size размер массива
+ * @param start начало диапазона
+ * @param end конец диапазона
  */
-void fillRandom(int* arr, const size_t size);
+void fillRandom(int* arr, const size_t size, const int start, const int end);
 
 /**
  * @brief Создаёт копию массива
@@ -79,36 +81,54 @@ enum {RANDOM = 1, MANUAL};
 int main(void)
 {
     size_t size = getSize("Input size of an array:\n");
-    int* arr = malloc(size* sizeof(int));
+    int* arr = malloc(size * sizeof(int));
     if (arr == NULL)
     {
-        fprintf(stderr,"Error");
+        fprintf(stderr, "Error: memory allocation failed\n");
         exit(1);
     }
+    
     printf("Chose the method of filling the array:\n%d - by random\n%d - manually\n", RANDOM, MANUAL);
     int choice = Value();
+    
     switch(choice)
-        {
-            case RANDOM:
-                fillRandom(arr, size);
+    {
+        case RANDOM:
+            {
+                printf("diapozon start:\n");
+                const int start = Value();
+                printf("diapozon end:\n");
+                const int end = Value();
+                if (start >= end) {
+                    fprintf(stderr, "Error: end must be more than start\n");
+                    free(arr);
+                    exit(1);
+                }
+                fillRandom(arr, size, start, end);
                 break;
-            case MANUAL:
-                fillArray(arr, size);
-                break;
-            default:
-                fprintf(stderr,"Error.");
-                free(arr);
-                exit(1);
-        }
+            }
+        case MANUAL:
+            fillArray(arr, size);
+            break;
+        default:
+            fprintf(stderr, "Error: invalid choice\n");
+            free(arr);
+            exit(1);
+    }
+    
     printArray(arr, size);
     printf("\n");
     sumEven(arr, size);
     printf("\n");
     countTwoDigitNumbers(arr, size);
     printf("\n");
+    
     int* copyArr = copyArray(arr, size);
-    replaceFirstAbsLastNegative(copyArr, size);
-    free(copyArr);
+    if (copyArr != NULL) {
+        replaceFirstAbsLastNegative(copyArr, size);
+        free(copyArr);
+    }
+    
     free(arr);
     return 0;
 }
@@ -130,7 +150,7 @@ size_t getSize(char* message)
     int value = Value();
     if (value <= 0)
     {
-        fprintf(stderr,"Input error");
+        fprintf(stderr, "Input error: size must be positive\n");
         exit(1);
     }
     return (size_t)value;
@@ -138,6 +158,11 @@ size_t getSize(char* message)
 
 void fillArray(int* arr, const size_t size)
 {
+    if (arr == NULL) {
+        fprintf(stderr, "Error: null pointer in fillArray\n");
+        exit(1);
+    }
+    
     for (size_t i = 0; i < size; i++)
     {
         printf("Input %zu element of array:", i);
@@ -147,6 +172,11 @@ void fillArray(int* arr, const size_t size)
 
 void printArray(int* arr, const size_t size)
 {
+    if (arr == NULL) {
+        fprintf(stderr, "Error: null pointer in printArray\n");
+        return;
+    }
+    
     printf("Your array is:\n");
     for (size_t i = 0; i < size; i++)
     {
@@ -157,27 +187,29 @@ void printArray(int* arr, const size_t size)
 
 void sumEven(int* arr, const size_t size)
 {
+    if (arr == NULL) {
+        fprintf(stderr, "Error: null pointer in sumEven\n");
+        return;
+    }
+    
     int result = 0;
     for (size_t i = 0; i < size; i++)
     {
         if (arr[i] % 2 == 0)
-            {
-                result += arr[i];
-            }
+        {
+            result += arr[i];
+        }
     }
     printf("Sum of even numbers is %d.\n", result);
 }
 
-void fillRandom(int* arr, const size_t size)
+void fillRandom(int* arr, const size_t size, const int start, const int end)
 {
-    printf("diapozon start:\n");
-    int start = Value();
-    printf("diapozon end:\n");
-    int end = Value();
-    if (start >= end) {
-        fprintf(stderr, "Error: end must be more than start\n");
+    if (arr == NULL) {
+        fprintf(stderr, "Error: null pointer in fillRandom\n");
         exit(1);
     }
+    
     for (size_t i = 0; i < size; i++)
     {
         arr[i] = rand() % (end - start + 1) + start;
@@ -186,8 +218,18 @@ void fillRandom(int* arr, const size_t size)
 
 int* copyArray(const int* arr, const size_t size)
 {
-    int* copyArr = malloc(sizeof(int)*size);
-    for (size_t i = 0; i<size; i++)
+    if (arr == NULL) {
+        fprintf(stderr, "Error: null pointer in copyArray\n");
+        return NULL;
+    }
+    
+    int* copyArr = malloc(sizeof(int) * size);
+    if (copyArr == NULL) {
+        fprintf(stderr, "Error: memory allocation failed in copyArray\n");
+        return NULL;
+    }
+    
+    for (size_t i = 0; i < size; i++)
     {
         copyArr[i] = arr[i];
     }
@@ -195,8 +237,12 @@ int* copyArray(const int* arr, const size_t size)
 }
 
 void countTwoDigitNumbers(int* arr, const size_t size) {
+    if (arr == NULL) {
+        fprintf(stderr, "Error: null pointer in countTwoDigitNumbers\n");
+        return;
+    }
+    
     int count = 0;
-
     for (size_t i = 0; i < size; i++) {
         if ((arr[i] >= 10 && arr[i] <= 99) || (arr[i] <= -10 && arr[i] >= -99)) {
             count++;
@@ -206,6 +252,11 @@ void countTwoDigitNumbers(int* arr, const size_t size) {
 }
 
 int replaceFirstAbsLastNegative(int* copyArr, const size_t size) {
+    if (copyArr == NULL) {
+        fprintf(stderr, "Error: null pointer in replaceFirstAbsLastNegative\n");
+        return 0;
+    }
+    
     int firstAbs = abs(copyArr[0]);
     for (size_t i = size; i > 0; i--) {
         if (copyArr[i-1] < 0) {
