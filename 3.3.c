@@ -68,9 +68,10 @@ int main(void)
     printf("Insert e:\n");
     double e = getDouble();
     checkPositive(e);
-    for (double x = min; x < max + step; x += step) {
+    
+    for (double x = min; x < max + step - DBL_EPSILON; x += step) {
         printf("x = %.6lf, cos(x) = %.6lf, S = %.6lf\n", x, cosFunc(x), getSumE(e, x));
-        }
+    }
     return 0;
 }
 
@@ -101,7 +102,7 @@ void checkStep(const double step) {
 
 void checkPositive(const double value)
 {
-    if (value < 0)
+    if (value < -DBL_EPSILON)
     {
         fprintf(stderr, "Input error.");
         exit(1);
