@@ -104,7 +104,7 @@ int** copyArray(int** arr, const size_t rows, const size_t columns);
 */
 enum { RANDOM = 1, MANUAL };
 
-int main()
+int main(void)
 {
     srand(time(NULL));
 
