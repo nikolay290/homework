@@ -1,49 +1,51 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <locale.h>
+
 
 /**
- * @brief Считывает значение, введенное с клавиатуры с проверкой ввода
- * @return Считанное значение
+ * @return Ввод данных типа int
+ * @return Введенное значение
  */
-int Value(void);
+int Value();
 
 /**
- * @brief Получение размера массива
- * @param message сообщение пользователю
- * @return Размер массива
+ * @brief Выводит текстовое сообщение о необходимости ввода размера массива, проверяет ввод на правильность, задаёт размер массива
+ * @param message текстовое сообщение о необходимости ввода массива
+ * @return размер массива (количество его элементов)
  */
 size_t getSize(char* message);
 
 /**
- * @brief Заполнение массива с клавиатуры
- * @param arr Указатель на массив
- * @param rows Количество строк массива
- * @param columns Количество столбцов массива
+ * @brief Считывает значения элементов массива
+ * @param arr массив
+ * @param rows количество строк массива
+ * @param columns количество столбцов массива
  */
 void fillArray(int** arr, const size_t rows, const size_t columns);
 
 /**
- * @brief Вывод массива на экран
- * @param arr Массив
- * @param rows Количество строк массива
- * @param columns Количество столбцов массива
+ * @brief Выводит массив на экран
+ * @param arr массив
+ * @param rows количесство строк массива
+ * @param columns количество столбцов массива
  */
 void printArray(int** arr, const size_t rows, const size_t columns);
 
 /**
- * @brief Заполнение массива случайными числами
- * @param arr Массив
- * @param rows Количество строк массива
- * @param columns Количество столбцов массива
+ * @brief Заполняет массив случайными числами в выбранном пользователе диапазоне
+ * @param arr массив
+ * @param rows количество строк
+ * @param columns количество столбцов
  */
 void fillRandom(int** arr, const size_t rows, const size_t columns);
 
 /**
  * @brief Создаёт массив по указанным пользователем вводным данным
- * @param rows количество строк массива
- * @param columns количество столбцов массива
+ * @param rows количество строк
+ * @param columns количество столбцов
  * @return полученный массив
  */
 int** getArray(const size_t rows, const size_t columns);
@@ -51,85 +53,68 @@ int** getArray(const size_t rows, const size_t columns);
 /**
  * @brief Освобождает память, выделенную под массив
  * @param arr массив
- * @param rows количество строк массива
+ * @param rows количество строк
  */
 void freeArray(int** arr, const size_t rows);
 
 /**
- * @brief Проверяет корректность диапазона случайных чисел
- * @param start Начало диапазона
- * @param end Конец диапазона
- */
-void checkRange(const int start, const int end);
-
-/**
- * @brief Создаёт копию массива
- * @param arr Исходный массив
- * @param rows Количество строк массива
- * @param columns Количество столбцов массива
- * @return Полученный массив
- */
-int** copyArray(int** arr, const size_t rows, const size_t columns);
-
-/**
  * @brief Заменяет минимальный по модулю элемент каждого столбца на противоположный
- * @param copyArr массив
- * @param rows количество строк массива
- * @param columns количество столбцов массива
- */
-void replaceMinOpposite(int** copyArr, const size_t rows, const size_t columns);
-
-/**
- * @brief Находит максимальное значение в массиве
  * @param arr массив
- * @param rows количество строк
- * @param columns количество столбцов
- * @return максимальное значение в массиве
+ * @param rows количество строк массива
+ * @param columns количство столбцов массива
  */
-int findMaxValue(int** arr, const size_t rows, const size_t columns);
+void replaceMinOpposite(int** arr, const size_t rows, const size_t columns);
 
 /**
- * @brief Определяет количество строк, которые не содержат максимальное значение
+ * @brief Подсчитывает количество строк, которые нужно сохранить (без максимального элемента)
  * @param arr массив
  * @param rows количество строк массива
  * @param columns количество столбцов массива
- * @param max максимальное значение
- * @return количество строк для сохранения
+ * @return количество строк без максимального элемента
  */
-size_t rowsToKeepCount(int** arr, const size_t rows, const size_t columns, const int max);
+size_t getCountRowsWithoutMax(int** arr, const size_t rows, const size_t columns);
 
 /**
  * @brief Удаляет все строки массива с максимальным значением
- * @param copyArr массив
+ * @param arr массив
  * @param rows количество строк массива
  * @param columns количество столбцов массива
  * @return новый массив после удаления строк
  */
-int** delRowsWithMax(int** copyArr, size_t* rows, const size_t columns);
+int** delRowsWithMax(int** arr, const size_t rows, const size_t columns, size_t newRows);
 
 /**
- * @brief RANDOM - заполнение массива случайными числами
- * @brief MANUAL - заполнение массива вручную.
+ * @brief Проверяет, что минимальное значенье меньше максимального
+ * @param min минимальное значение
+ * @param max максимальное значение
  */
+void checkRange(const int min, const int max);
+
+/**
+ * @brief Создаёт копию массива для дальнейшей работы с ней
+ * @param arr изначальный массив
+ * @param rows количество строк
+ * @param columns количество столбцов
+ * @return копию массива
+ */
+int** copyArray(int** arr, const size_t rows, const size_t columns);
+/**
+* @param RANDOM - Заполнение массива случайными числами
+* @param MANUAL - Заполнение массива вручную
+*/
 enum { RANDOM = 1, MANUAL };
 
-/**
- * @brief Точка входа в программу
- * @return 0, если программа выполнена корректно
- */
-int main(void)
+int main()
 {
-    char* locale = setlocale(LC_ALL, "");
-    size_t rows = getSize("Введите количество строк массива: ");
-    size_t columns = getSize("Введите количество столбцов массива: ");
+    srand(time(NULL));
+
+    size_t rows = getSize("Введите количество строк массива:  ");
+    size_t columns = getSize("Введите количество столбцов массива:  ");
 
     int** arr = getArray(rows, columns);
 
     printf("Выберите способ заполнения массива:\n"
-        "%d - случайными числами\n"
-        "%d - вручную\n"
-        "Введите нужный номер заполнения: ",
-        RANDOM, MANUAL);
+        "%d - случайными числами, %d - вручную: ", RANDOM, MANUAL);
     int choice = Value();
 
     switch (choice)
@@ -141,44 +126,48 @@ int main(void)
         fillArray(arr, rows, columns);
         break;
     default:
-        printf("Ошибка!\n");
+        printf("Ошибка выбора\n");
         freeArray(arr, rows);
         return 1;
     }
 
-    printf("Исходный массив:\n");
+    printf("\nИсходный массив:\n");
     printArray(arr, rows, columns);
 
+    // 1. Замена минимальных по модулю элементов
     int** copyArr = copyArray(arr, rows, columns);
-    printf("Замена минимального по модулю элемента в каждом столбце на противоположный:\n");
     replaceMinOpposite(copyArr, rows, columns);
+    printf("После замены минимальных по модулю элементов в каждом столбце:\n");
     printArray(copyArr, rows, columns);
 
-    printf("Удаление строк с максимальным элементом:\n");
-    size_t newRows = rows;
-    int** newArr = delRowsWithMax(copyArr, &newRows, columns);
+    // 2. Удаление строк с максимальными элементами
+    size_t newRows = getCountRowsWithoutMax(arr, rows, columns);
+    printf("Удаление строк с максимальными элементами:\n");
 
-    if (newRows == 0) {
-        printf("Все строки были удалены.\n");
-    }
-    else {
+    if (newRows > 0)
+    {
+        int** newArr = delRowsWithMax(arr, rows, columns, newRows);
         printArray(newArr, newRows, columns);
+        freeArray(newArr, newRows);
+    }
+    else
+    {
+        printf("Все строки были удалены (все содержали максимальный элемент)\n");
     }
 
     freeArray(arr, rows);
     freeArray(copyArr, rows);
-    freeArray(newArr, newRows);
 
     return 0;
 }
 
-int Value(void)
+int Value()
 {
     int value = 0;
-    if (scanf("%d", &value) != 1)
+    if (!scanf_s("%d", &value))
     {
-        printf("Ошибка!\n");
-        exit(1);
+        printf("Ошибка ввода\n");
+        abort();
     }
     return value;
 }
@@ -189,8 +178,8 @@ size_t getSize(char* message)
     int value = Value();
     if (value <= 0)
     {
-        printf("Ошибка!");
-        exit(1);
+        printf("Ошибка: размер должен быть положительным\n");
+        abort();
     }
     return (size_t)value;
 }
@@ -223,17 +212,16 @@ void printArray(int** arr, const size_t rows, const size_t columns)
 void fillRandom(int** arr, const size_t rows, const size_t columns)
 {
     printf("Введите минимальное значение: ");
-    int start = Value();
+    int min = Value();
     printf("Введите максимальное значение: ");
-    int end = Value();
-    checkRange(start, end);
+    int max = Value();
+    checkRange(min, max);
 
-    srand((unsigned int)time(NULL));
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < columns; j++)
         {
-            arr[i][j] = (rand() % (end - start + 1)) + start;
+            arr[i][j] = (rand() % (max - min + 1)) + min;
         }
     }
 }
@@ -243,15 +231,16 @@ int** getArray(const size_t rows, const size_t columns)
     int** arr = malloc(rows * sizeof(int*));
     if (arr == NULL)
     {
-        printf("Ошибка выделения памяти.\n");
+        printf("Ошибка выделения памяти\n");
         exit(1);
     }
+
     for (size_t i = 0; i < rows; i++)
     {
         arr[i] = malloc(columns * sizeof(int));
         if (arr[i] == NULL)
         {
-            printf("Ошибка выделения памяти.\n");
+            printf("Ошибка выделения памяти\n");
             for (size_t j = 0; j < i; j++)
             {
                 free(arr[j]);
@@ -265,27 +254,133 @@ int** getArray(const size_t rows, const size_t columns)
 
 void freeArray(int** arr, const size_t rows)
 {
-    if (arr != NULL) {
-        for (size_t i = 0; i < rows; i++)
-        {
-            free(arr[i]);
-        }
-        free(arr);
+    for (size_t i = 0; i < rows; i++)
+    {
+        free(arr[i]);
+    }
+    free(arr);
+}
+
+void checkRange(const int min, const int max)
+{
+    if (min > max)
+    {
+        printf("Ошибка: минимальное значение больше максимального\n");
+        exit(1);
     }
 }
 
-void checkRange(const int start, const int end)
+void replaceMinOpposite(int** arr, const size_t rows, const size_t columns)
 {
-    if (start > end)
+    for (size_t j = 0; j < columns; j++)
     {
-        printf("Ошибка, конец должен быть больше начала!\n");
-        exit(1);
+        // 1. Находим минимальное значение по модулю
+        int minAbs = abs(arr[0][j]);
+        for (size_t i = 1; i < rows; i++)
+        {
+            int currentAbs = abs(arr[i][j]);
+            if (currentAbs < minAbs)
+            {
+                minAbs = currentAbs;
+            }
+        }
+
+        // 2. Меняем ВСЕ элементы с таким модулем
+        for (size_t i = 0; i < rows; i++)
+        {
+            if (abs(arr[i][j]) == minAbs)
+            {
+                arr[i][j] = -arr[i][j];
+            }
+        }
     }
+}
+size_t getCountRowsWithoutMax(int** arr, const size_t rows, const size_t columns)
+{
+    // Находим максимальное значение
+    int maxValue = arr[0][0];
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < columns; j++)
+        {
+            if (arr[i][j] > maxValue)
+            {
+                maxValue = arr[i][j];
+            }
+        }
+    }
+
+    // Считаем строки без максимального значения
+    size_t count = 0;
+    for (size_t i = 0; i < rows; i++)
+    {
+        bool hasMax = false;
+        for (size_t j = 0; j < columns; j++)
+        {
+            if (arr[i][j] == maxValue)
+            {
+                hasMax = true;
+                break;
+            }
+        }
+        if (!hasMax)
+        {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+int** delRowsWithMax(int** arr, const size_t rows, const size_t columns, size_t newRows)
+{
+    // Находим максимальное значение
+    int maxValue = arr[0][0];
+    for (size_t i = 0; i < rows; i++)
+    {
+        for (size_t j = 0; j < columns; j++)
+        {
+            if (arr[i][j] > maxValue)
+            {
+                maxValue = arr[i][j];
+            }
+        }
+    }
+
+    // Создаем новый массив
+    int** newArr = getArray(newRows, columns);
+
+    // Копируем строки без максимального значения
+    size_t newIndex = 0;
+    for (size_t i = 0; i < rows; i++)
+    {
+        bool hasMax = false;
+        for (size_t j = 0; j < columns; j++)
+        {
+            if (arr[i][j] == maxValue)
+            {
+                hasMax = true;
+                break;
+            }
+        }
+
+        if (!hasMax)
+        {
+            for (size_t j = 0; j < columns; j++)
+            {
+                newArr[newIndex][j] = arr[i][j];
+            }
+            newIndex++;
+        }
+    }
+
+    return newArr;
 }
 
 int** copyArray(int** arr, const size_t rows, const size_t columns)
 {
     int** copyArr = getArray(rows, columns);
+
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < columns; j++)
@@ -293,104 +388,6 @@ int** copyArray(int** arr, const size_t rows, const size_t columns)
             copyArr[i][j] = arr[i][j];
         }
     }
+
     return copyArr;
-}
-
-void replaceMinOpposite(int** copyArr, const size_t rows, const size_t columns)
-{
-    for (size_t j = 0; j < columns; j++)
-    {
-        size_t minIndex = 0;
-        int minAbs = abs(copyArr[0][j]);
-        for (size_t i = 1; i < rows; i++)
-        {
-            int curAbs = abs(copyArr[i][j]);
-            if (curAbs < minAbs)
-            {
-                minAbs = curAbs;
-                minIndex = i;
-            }
-        }
-        copyArr[minIndex][j] = -copyArr[minIndex][j];
-    }
-}
-
-int findMaxValue(int** arr, const size_t rows, const size_t columns)
-{
-    int max = arr[0][0];
-    for (size_t i = 0; i < rows; i++)
-    {
-        for (size_t j = 0; j < columns; j++)
-        {
-            if (arr[i][j] > max)
-            {
-                max = arr[i][j];
-            }
-        }
-    }
-    return max;
-}
-
-size_t rowsToKeepCount(int** arr, const size_t rows, const size_t columns, const int max)
-{
-    size_t count = 0;
-    for (size_t i = 0; i < rows; i++)
-    {
-        int containsMax = 0;
-        for (size_t j = 0; j < columns; j++)
-        {
-            if (arr[i][j] == max)
-            {
-                containsMax = 1;
-                break;
-            }
-        }
-        if (!containsMax)
-        {
-            count++;
-        }
-    }
-    return count;
-}
-
-int** delRowsWithMax(int** copyArr, size_t* rows, const size_t columns)
-{
-    if (*rows == 0) return NULL;
-
-    int max = findMaxValue(copyArr, *rows, columns);
-    size_t countToKeep = rowsToKeepCount(copyArr, *rows, columns, max);
-
-    if (countToKeep == 0)
-    {
-        *rows = 0;
-        return NULL;
-    }
-
-    int** newArr = getArray(countToKeep, columns);
-    size_t newIndex = 0;
-
-    for (size_t i = 0; i < *rows; i++)
-    {
-        int containsMax = 0;
-        for (size_t j = 0; j < columns; j++)
-        {
-            if (copyArr[i][j] == max)
-            {
-                containsMax = 1;
-                break;
-            }
-        }
-
-        if (!containsMax)
-        {
-            for (size_t j = 0; j < columns; j++)
-            {
-                newArr[newIndex][j] = copyArr[i][j];
-            }
-            newIndex++;
-        }
-    }
-
-    *rows = countToKeep;
-    return newArr;
 }
